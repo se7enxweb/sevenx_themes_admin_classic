@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="../../lib/ezxml/schema/extension.xsd"
+           name="sevenx_themes_admin_classic"
+           version="0.1.0"
+           status="stable"
+           most_compatible_version="0.1.0"
+           copyright="Copyright (C) 1998 - 2026 7x. All rights reserved."
+           license="GNU General Public License v2.0"
+           info_url="https://se7enx.com/">
+    <dependencies>
+        <requires>
+            <ezpublish version="4.7"/>
+        </requires>
+        <provides>
+            <extension identifier="sevenx_themes_admin_classic" version="0.1.0"/>
+        </provides>
+    </dependencies>
+</extension>

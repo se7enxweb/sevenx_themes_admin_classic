@@ -1,0 +1,102 @@
+{
+    "name": "se7enxweb/sevenx_themes_admin_classic",
+    "description": "sevenx_themes_admin_classic is a compatibility-first, operator-friendly eZ Publish Legacy / Exponential Platform Legacy extension that introduces a controlled Admin Design switch workflow, session-aware visual behavior toggling, and classic admin ergonomics for teams that maintain long-lived editorial back offices and need predictable, reversible, low-risk UI transitions.",
+    "type": "ezpublish-legacy-extension",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://github.com/se7enxweb/sevenx_themes_admin_classic",
+    "readme": "README.md",
+    "time": "2026-06-20",
+    "keywords": [
+        "eZ Publish",
+        "eZ Publish Legacy",
+        "Exponential Platform",
+        "legacy admin",
+        "admin3",
+        "admin_classic",
+        "design switching",
+        "toolbar",
+        "session-based ui",
+        "template controls",
+        "back office",
+        "editor experience",
+        "compatibility",
+        "migration-safe",
+        "sevenx"
+    ],
+    "authors": [
+        {
+            "name": "7x",
+            "email": "info@se7enx.com",
+            "homepage": "https://se7enx.com",
+            "role": "Primary Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/se7enxweb/sevenx_themes_admin_classic/issues",
+        "source": "https://github.com/se7enxweb/sevenx_themes_admin_classic",
+        "wiki": "https://github.com/se7enxweb/sevenx_themes_admin_classic/wiki",
+        "docs": "https://github.com/se7enxweb/sevenx_themes_admin_classic/tree/main/doc",
+        "email": "info@se7enx.com"
+    },
+    "funding": [
+        {
+            "type": "other",
+            "url": "https://se7enx.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "se7enxweb/exponential-legacy-installer": "*"
+    },
+    "suggest": {
+        "ext-json": "Improves portability and resilience for metadata-driven integrations and diagnostic tooling in legacy deployments.",
+        "ext-mbstring": "Recommended for robust multibyte handling in editorial environments that publish multilingual content.",
+        "ext-iconv": "Recommended where character set normalization and safe legacy encoding conversions are expected.",
+        "ext-session": "Expected for session-based admin design mode switching behavior."
+    },
+    "conflict": {
+        "se7enxweb/sevenx_themes_admin3_only": "*"
+    },
+    "replace": {
+        "se7enxweb/sevenx_themes_admin_classic-legacy-package": "self.version"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "ezpublish-legacy-extension-name": "sevenx_themes_admin_classic",
+        "branch-alias": {
+            "dev-main": "0.2.x-dev"
+        },
+        "sevenx-meta": {
+            "project-intent": "Provide an intentionally explicit and reversible admin design switch capability that keeps SiteDesign stable while allowing AdditionalSiteDesignList behavior to adapt by session context.",
+            "operational-philosophy": "Bias toward predictable behavior, transparent configuration layering, and minimal-kernel-touch architecture suitable for conservative production stacks.",
+            "configuration-contract": {
+                "default-file": "extension/sevenx_themes_admin_classic/settings/sevenxthemesadminclassic.ini.append.php",
+                "deployment-override-file": "settings/override/sevenxthemesadminclassic.ini.append.php",
+                "guideline": "Environment-specific values belong in settings/override; extension-level settings remain portable defaults."
+            },
+            "feature-map": [
+                "Admin Design switch endpoint with explicit mode handling",
+                "Session-driven AdditionalSiteDesignList strategy",
+                "Toolbar control integration",
+                "Template-level subitems visibility control",
+                "High-limit subitems pagination controls with safe defaults"
+            ],
+            "runtime-assumptions": [
+                "Legacy template resolver behavior may cache design location data per siteaccess",
+                "Session persistence is available and enabled",
+                "Administrative users can access user preference routes"
+            ],
+            "safety-notes": [
+                "Keep extension defaults generic to avoid environment lock-in",
+                "Use override files for deployment-specific siteaccess identifiers",
+                "Clear template cache after toolbar/template modifications"
+            ],
+            "maintainability-notes": {
+                "style": "Conservative, explicit, low-magic",
+                "change-management": "Prefer additive, isolated changes and avoid global behavior regressions",
+                "documentation-priority": "Operational clarity over brevity"
+            }
+        }
+    }
+}
