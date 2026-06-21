@@ -76,6 +76,22 @@ Important:
 php ./bin/php/ezcache.php --clear-all
 ```
 
+### 6. Set admin siteaccess content view preferences for subitems controls
+
+Edit your admin siteaccess file, for example:
+
+`settings/siteaccess/korg_edit/site.ini.append.php`
+
+Set:
+
+```ini
+[ContentSettings]
+CachedViewPreferences[full]=admin_navigation_content=1;admin_navigation_subitems=1;admin_subitems_limit=200;admin_children_viewmode=list;admin_list_limit=1
+TranslationList=
+```
+
+This ensures Sub items window visibility and default subitems pagination behavior are initialized correctly for admin users.
+
 ---
 
 ## Configuration
@@ -87,13 +103,13 @@ Ensure `admin_classic` is listed in `AdditionalSiteDesignList` for your admin si
 ```ini
 [DesignSettings]
 SiteDesign=sevenx_site_admin
-AdditionalSiteDesignList[]=admin_classic
 AdditionalSiteDesignList[]=admin3
+AdditionalSiteDesignList[]=admin_classic
 AdditionalSiteDesignList[]=admin2
 AdditionalSiteDesignList[]=admin
 ```
 
-> Note: `admin_classic` must appear **before** `admin3` in this list when you want it enabled by default, or you can leave the list as-is and rely solely on the session-based kernel hack to prepend it dynamically.
+> Note: `admin_classic` must appear **before** `admin` and **after** `admin3` in this list when you want it enabled by default, or you can leave the list as-is and rely solely on the session-based kernel hack to prepend it dynamically.
 
 ---
 

@@ -80,7 +80,21 @@ define( 'EZP_AUTOLOAD_ALLOW_KERNEL_OVERRIDE', true );
 php ./bin/php/ezpgenerateautoloads.php --kernel-override
 ```
 
-4. Clear caches:
+4. Customize admin siteaccess content view preferences (required for subitems controls):
+
+Edit your admin siteaccess file, for example:
+
+`settings/siteaccess/korg_edit/site.ini.append.php`
+
+Set:
+
+```ini
+[ContentSettings]
+CachedViewPreferences[full]=admin_navigation_content=1;admin_navigation_subitems=1;admin_subitems_limit=200;admin_children_viewmode=list;admin_list_limit=1
+TranslationList=
+```
+
+5. Clear caches:
 
 ```bash
 php ./bin/php/ezcache.php --clear-all
