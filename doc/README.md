@@ -92,6 +92,50 @@ TranslationList=
 
 This ensures Sub items window visibility and default subitems pagination behavior are initialized correctly for admin users.
 
+### 7. Register the Admin Design toolbar tool (required for button visibility)
+
+Edit your active admin siteaccess toolbar file, for example:
+
+`settings/siteaccess/korg_edit/toolbar.ini.append.php`
+
+Ensure these entries exist:
+
+```ini
+[Tool]
+AvailableToolArray[]=admin_switch_design
+
+[Toolbar_admin_developer]
+Tool[]=admin_clear_cache
+Tool[]=admin_switch_design
+Tool[]=admin_quick_settings
+```
+
+If this registration is missing, the button will not render even if module code is installed and working.
+
+### 8. Verify role policy for module access
+
+Expected behavior:
+
+- Admin role with `all modules / all functions / no limitations` should already have access.
+
+If you are using explicit module policies, grant:
+
+```ini
+Module: switchadmindesign
+Function: switch
+```
+
+Optional fallback (not recommended by default):
+
+`extension/sevenx_themes_admin_classic/settings/site.ini.append.php`
+
+```ini
+[RoleSettings]
+PolicyOmitList[]=switchadmindesign
+```
+
+Keep this commented in extension defaults unless you intentionally want global bypass behavior.
+
 ---
 
 ## Configuration

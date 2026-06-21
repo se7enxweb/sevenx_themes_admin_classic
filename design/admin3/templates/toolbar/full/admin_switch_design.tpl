@@ -3,7 +3,11 @@
 
 {def $switchadmindesign_info = fetch( 'switchadmindesign', 'current_design', hash() )
      $switchadmindesign_is_classic = $switchadmindesign_info.is_classic
-     $switchadmindesign_current_uri = concat( '/', $module_result.uri )}
+    $switchadmindesign_current_uri = cond(
+        ezhttp_hasvariable( 'LastAccessesURI', 'session' ),
+        ezhttp( 'LastAccessesURI', 'session' ),
+        concat( '/', $module_result.uri )
+    )}
 
 <div class="block">
     <label>{'Admin Design'|i18n( 'design/admin_classic/toolbar' )}</label>

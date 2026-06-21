@@ -94,7 +94,45 @@ CachedViewPreferences[full]=admin_navigation_content=1;admin_navigation_subitems
 TranslationList=
 ```
 
-5. Clear caches:
+5. Register the toolbar tool in your active admin siteaccess (required for button visibility):
+
+Edit for your active admin siteaccess, for example:
+
+`settings/siteaccess/korg_edit/toolbar.ini.append.php`
+
+Ensure these entries exist:
+
+```ini
+[Tool]
+AvailableToolArray[]=admin_switch_design
+
+[Toolbar_admin_developer]
+Tool[]=admin_clear_cache
+Tool[]=admin_switch_design
+Tool[]=admin_quick_settings
+```
+
+6. Ensure role policy allows module access:
+
+For standard admin role setups using "all modules / all functions / no limitations", no extra policy is needed.
+
+If you use explicit module policies, grant:
+
+```ini
+Module: switchadmindesign
+Function: switch
+```
+
+Optional (not recommended as default): omit policy checks entirely via extension `site.ini`.
+
+`extension/sevenx_themes_admin_classic/settings/site.ini.append.php`
+
+```ini
+[RoleSettings]
+PolicyOmitList[]=switchadmindesign
+```
+
+7. Clear caches:
 
 ```bash
 php ./bin/php/ezcache.php --clear-all

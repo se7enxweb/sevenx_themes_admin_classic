@@ -17,7 +17,60 @@ $Module = $Params['Module'];
 $http  = eZHTTPTool::instance();
 $ini   = eZINI::instance();
 
-$fallbackRedirectURI = 'content/dashboard';
+$fallbackRedirectURI = '/';
+
+/**
+ * Converts user-provided redirect targets to local-safe URIs.
+ *
+ * redirectTo() forbids absolute URLs on unknown hosts. In proxied/multi-host
+ * setups the posted RedirectURI may occasionally contain an absolute URL with
+ * a host not present in AllowedRedirectHosts, causing intermittent 403 errors.
+ * We intentionally strip scheme/host and keep only path+query+fragment.
+ *
+ * @param string|null $uri
+ * @param string $fallback
+ * @return string
+ */
+function sevenxSwitchAdminDesignNormalizeRedirectURI( $uri, $fallback )
+{
+    if ( $uri === null )
+    {
+        return $fallback;
+    }
+
+    $uri = trim( $uri );
+    if ( $uri === '' )
+    {
+        return $fallback;
+    }
+
+    // Strip control characters defensively.
+    $uri = preg_replace( '/[\x00-\x1F\x7F]/', '', $uri );
+
+    $parts = @parse_url( $uri );
+    if ( $parts !== false && isset( $parts['host'] ) )
+    {
+        $path = isset( $parts['path'] ) ? $parts['path'] : '/';
+        $query = isset( $parts['query'] ) ? '?' . $parts['query'] : '';
+        $fragment = isset( $parts['fragment'] ) ? '#' . $parts['fragment'] : '';
+        $uri = $path . $query . $fragment;
+    }
+
+    // Prevent protocol-relative redirects.
+    if ( strpos( $uri, '//' ) === 0 )
+    {
+        $uri = ltrim( $uri, '/' );
+    }
+
+    // redirectTo() accepts relative module URIs; normalize to that form.
+    $uri = ltrim( $uri, '/' );
+    if ( $uri === '' )
+    {
+        return $fallback;
+    }
+
+    return $uri;
+}
 
 // Fetch the configured session variable name from extension settings
 $sevenxINI = eZINI::instance( 'sevenxthemesadminclassic.ini' );
@@ -82,12 +135,34 @@ if ( $requestedDesign !== null )
         eZCache::clearByTag( 'template-block' );
     }
 
-    if ( $userRedirectURI != null )
+    if ( $userRedirectURI === null || trim( $userRedirectURI ) === '' )
     {
-        return $Module->redirectTo( $userRedirectURI );
+        if ( $http->hasSessionVariable( 'LastAccessesURI' ) )
+        {
+            $userRedirectURI = $http->sessionVariable( 'LastAccessesURI' );
+        }
+        else if ( isset( $_SERVER['HTTP_REFERER'] ) && trim( $_SERVER['HTTP_REFERER'] ) !== '' )
+        {
+            $userRedirectURI = $_SERVER['HTTP_REFERER'];
+        }
     }
+
+    $safeRedirectURI = sevenxSwitchAdminDesignNormalizeRedirectURI( $userRedirectURI, $fallbackRedirectURI );
+    return $Module->redirectTo( $safeRedirectURI );
 }
 
-return $Module->redirectTo( $fallbackRedirectURI );
+// No valid design action submitted; redirect back to where user came from.
+$defaultRedirectURI = null;
+if ( $http->hasSessionVariable( 'LastAccessesURI' ) )
+{
+    $defaultRedirectURI = $http->sessionVariable( 'LastAccessesURI' );
+}
+else if ( isset( $_SERVER['HTTP_REFERER'] ) && trim( $_SERVER['HTTP_REFERER'] ) !== '' )
+{
+    $defaultRedirectURI = $_SERVER['HTTP_REFERER'];
+}
+
+$safeDefaultRedirectURI = sevenxSwitchAdminDesignNormalizeRedirectURI( $defaultRedirectURI, $fallbackRedirectURI );
+return $Module->redirectTo( $safeDefaultRedirectURI );
 
 ?>
