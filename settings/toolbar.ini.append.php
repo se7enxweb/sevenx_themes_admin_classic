@@ -11,13 +11,13 @@ AvailableToolArray[]=admin_quick_settings
 
 [Toolbar_admin_right]
 Tool[]
+Tool[]=admin_clear_cache
+Tool[]=admin_bookmarks
 Tool[]=admin_current_user
 Tool[]=admin_preferences
-Tool[]=admin_bookmarks
 
 [Toolbar_admin_developer]
 Tool[]
-Tool[]=admin_clear_cache
 Tool[]=admin_switch_design
 Tool[]=admin_quick_settings
 
